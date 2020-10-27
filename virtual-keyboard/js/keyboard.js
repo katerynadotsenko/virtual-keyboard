@@ -26,7 +26,7 @@ export default class Keyboard {
         this.elements.main = document.createElement('div');
         this.elements.keysContainer = document.createElement('div');
         
-        this.elements.main.classList.add('keyboard');
+        this.elements.main.classList.add('keyboard', 'keyboard_hidden');
         this.elements.keysContainer.classList.add('keyboard__keys');
         this.elements.keysContainer.appendChild(this.createKeys());
 
@@ -36,8 +36,6 @@ export default class Keyboard {
         document.body.append(this.elements.main);
 
         this.keyboardInput = document.querySelector('.keyboard-input');
-
-        this.keyboardInput.focus();
 
         this.keyboardInput.addEventListener('keyup', () => {
             console.log('this.keyboardInput.value - ', this.keyboardInput.value);
@@ -69,8 +67,11 @@ export default class Keyboard {
                     keyElement.textContent = key.valueENG;
 
                     keyElement.addEventListener('click', () => {
-                        this.properties.value = this.properties.value.slice(0, this.properties.value.length - 1);
+                        let position = this.keyboardInput.selectionStart;
+                        let text = this.keyboardInput.value;
+                        this.properties.value = text.slice(0, position-1) + text.slice(position, text.length);
                         this.triggerEvent('oninput');
+                        this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position-1;
                       });
                     break;
 
@@ -88,8 +89,8 @@ export default class Keyboard {
                     keyElement.classList.add('keyboard__key_wide');
                     keyElement.textContent = key.valueENG;
                     keyElement.addEventListener('click', () => {
-                        this.properties.value += '\n';
-                        this.triggerEvent('oninput');
+                        let keypress = '\n';
+                        this.input(keypress);
                     });
                     break;
 
@@ -101,8 +102,8 @@ export default class Keyboard {
                 case 'space':
                     keyElement.classList.add('keyboard__key_extra-wide');
                     keyElement.addEventListener('click', () => {
-                        this.properties.value += ' ';
-                        this.triggerEvent('oninput');
+                        let keypress = ' ';
+                        this.input(keypress);
                     });
                     break;
 
@@ -117,8 +118,8 @@ export default class Keyboard {
                 default:
                     keyElement.textContent = key.valueENG.toLowerCase();
                     keyElement.addEventListener('click', () => {
-                        this.properties.value += this.properties.capsLock ? key.valueENG.toUpperCase() : key.valueENG.toLowerCase();
-                        this.triggerEvent('oninput');
+                        let keypress = this.properties.capsLock ? key.valueENG.toUpperCase() : key.valueENG.toLowerCase();
+                        this.input(keypress);
                     });
                     break;
             }
@@ -131,6 +132,14 @@ export default class Keyboard {
         });
 
         return fragment;
+    }
+
+    input(key) {
+        let position = this.keyboardInput.selectionStart;
+        let text = this.keyboardInput.value;
+        this.properties.value = text.slice(0, position) + key + text.slice(position);
+        this.triggerEvent('oninput');
+        this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position + 1;
     }
 
     toggleCapsLock() {
