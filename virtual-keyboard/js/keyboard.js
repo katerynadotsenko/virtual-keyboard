@@ -58,7 +58,7 @@ export default class Keyboard {
         const fragment = document.createDocumentFragment();
         keys.forEach((key, i) => {
             const keyElement = document.createElement('button');
-            const insertLineBreak = [13, 26, 39, 51].filter(item => item === i);
+            const insertLineBreak = [13, 26, 39, 50].filter(item => item === i);
 
             keyElement.setAttribute('type', 'button');
             keyElement.classList.add('keyboard__key');
@@ -95,7 +95,7 @@ export default class Keyboard {
                         this.input(keypress);
                     });
                     break;
-
+                //TODO
                 case 'Shift':
                     keyElement.classList.add('keyboard__key_wide', 'keyboard__key_activatable');
                     keyElement.textContent = key.valueENG;
@@ -121,6 +121,23 @@ export default class Keyboard {
                     keyElement.textContent = key.valueENG;
                     keyElement.addEventListener('click', () => {
                         this.toggleLanguage();
+                    });
+                    break;
+                case '→':
+                    keyElement.textContent = key.valueENG;
+                    keyElement.addEventListener('click', () => {
+                        let position = this.keyboardInput.selectionStart;
+                        this.keyboardInput.focus();
+                        this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position + 1;
+
+                    });
+                    break;
+                case '←':
+                    keyElement.textContent = key.valueENG;
+                    keyElement.addEventListener('click', () => {
+                        let position = this.keyboardInput.selectionStart;
+                        this.keyboardInput.focus();
+                        this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position - 1;
                     });
                     break;
                 default:

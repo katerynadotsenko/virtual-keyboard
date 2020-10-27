@@ -57,10 +57,14 @@ const keys = [
     {
         valueENG: '-',
         shiftValueENG: '_',
+        valueRU: '-',
+        shiftValueRU: '_'
     },
     {
         valueENG: '=',
         shiftValueENG: '+',
+        valueRU: '=',
+        shiftValueRU: '+'
     },
     {
         valueENG: 'Backspace',
@@ -221,9 +225,6 @@ const keys = [
         shiftValueRU: ','
     },
     {
-        valueENG: '↑',
-    },
-    {
         valueENG: 'done',
     },
     {
@@ -236,19 +237,12 @@ const keys = [
         valueENG: 'space',
     },
     {
-        valueENG: '--',
-    },
-    {
-        valueENG: '--',
-    },
-    {
         valueENG: '←',
-    },
-    {
-        valueENG: '↓',
+        valueRU: '←'
     },
     {
         valueENG: '→',
+        valueRU: '→'
     }
 ]
 
