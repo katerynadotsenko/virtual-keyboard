@@ -5,7 +5,7 @@ body {
     font-size: 10px;
 }
 
-.output {
+.keyboard-input {
     width: 90%;
     min-height: 200px;
     height: calc(100vh - 350px);
@@ -21,6 +21,10 @@ body {
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     user-select: none;
     transition: bottom .3s;
+}
+
+.keyboard_hidden {
+    bottom: -100%;
 }
 
 .keyboard__keys {
@@ -61,4 +65,23 @@ body {
 .keyboard__key_extra-wide {
     width: 36%;
     max-width: 500px;
+}
+
+.keyboard__key_activatable::after {
+    content: '';
+    top: 10px;
+    right: 10px;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+}
+
+.keyboard__key_active::after {
+    background: #fff;
+}
+
+.keyboard__key_dark {
+    background: rgba(0, 0, 0, 0.25);
 }

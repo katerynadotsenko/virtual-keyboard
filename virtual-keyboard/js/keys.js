@@ -1,5 +1,8 @@
 const keys = [
     {
+        valueENG: 'done',
+    },
+    {
         valueENG: '`',
         shiftValueENG: '~',
         valueRU: 'ё'
