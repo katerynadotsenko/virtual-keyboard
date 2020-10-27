@@ -126,7 +126,7 @@ export default class Keyboard {
                 default:
                     keyElement.textContent = key.valueENG.toLowerCase();
                     keyElement.addEventListener('click', () => {
-                        let keypress = this.properties.capsLock ? key.valueENG.toUpperCase() : key.valueENG.toLowerCase();
+                        let keypress = this.properties.capsLock ? key[`value${this.properties.language}`].toUpperCase() : key[`value${this.properties.language}`].toLowerCase();
                         this.input(keypress);
                     });
                     break;
