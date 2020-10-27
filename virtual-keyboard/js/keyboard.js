@@ -39,9 +39,16 @@ export default class Keyboard {
 
         this.keyboardInput.focus();
 
+        this.keyboardInput.addEventListener('keyup', () => {
+            console.log('this.keyboardInput.value - ', this.keyboardInput.value);
+            //String.fromCharCode(e.keyCode)
+            this.properties.value = this.keyboardInput.value;
+        });
+
         this.keyboardInput.addEventListener('focus', () => {
             this.open(this.keyboardInput.value, currentValue => {
                 this.keyboardInput.value = currentValue;
+                console.log("currentValue - ", currentValue);
                 this.keyboardInput.focus();
             });
         });
