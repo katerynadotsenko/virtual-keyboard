@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    font-size: 10px;
+}
+
+.output {
+    width: 90%;
+    min-height: 200px;
+    height: calc(100vh - 350px);
+}
+
+.keyboard {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 5px 0;
+    background: #202020;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    user-select: none;
+    transition: bottom .3s;
+}
+
+.keyboard__keys {
+    text-align: center;
+}
+
+.keyboard__key {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: top;
+    width: 5%;
+    height: 55px;
+    max-width: 90px;
+    margin: 2.5px;
+    border-radius: 2px;
+    border: none;
+    background: rgba(255, 255, 255, .1);
+    color: #fff;
+    font-size: 1.4rem;
+    outline: none;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+}
+
+.keyboard__key:active {
+    background: rgba(255, 255, 255, .05);
+}
+
+.keyboard__key_wide {
+    width: 18%;
+    max-width: 120px;
+    font-size: 1.2rem;
+}
+
+.keyboard__key_extra-wide {
+    width: 36%;
+    max-width: 500px;
+}
