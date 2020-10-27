@@ -1,8 +1,5 @@
 const keys = [
     {
-        valueENG: 'done',
-    },
-    {
         valueENG: '`',
         shiftValueENG: '~',
         valueRU: 'ё'
@@ -224,7 +221,34 @@ const keys = [
         shiftValueRU: ','
     },
     {
+        valueENG: '↑',
+    },
+    {
+        valueENG: 'done',
+    },
+    {
+        valueENG: 'en/ru',
+    },
+    {
+        valueENG: '--',
+    },
+    {
         valueENG: 'space',
+    },
+    {
+        valueENG: '--',
+    },
+    {
+        valueENG: '--',
+    },
+    {
+        valueENG: '←',
+    },
+    {
+        valueENG: '↓',
+    },
+    {
+        valueENG: '→',
     }
 ]
 

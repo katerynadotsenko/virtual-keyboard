@@ -18,11 +18,13 @@ export default class Keyboard {
             value: '',
             capsLock: false,
             shift: false,
-            language: 'ENG'
+            language: null
         }
     }
 
     init() {
+        this.properties.language = 'ENG';
+
         this.elements.main = document.createElement('div');
         this.elements.keysContainer = document.createElement('div');
         
@@ -56,7 +58,7 @@ export default class Keyboard {
         const fragment = document.createDocumentFragment();
         keys.forEach((key, i) => {
             const keyElement = document.createElement('button');
-            const insertLineBreak = [14, 27, 40, 51].filter(item => item === i);
+            const insertLineBreak = [13, 26, 39, 51].filter(item => item === i);
 
             keyElement.setAttribute('type', 'button');
             keyElement.classList.add('keyboard__key');
@@ -115,6 +117,12 @@ export default class Keyboard {
                     });
                     break;
 
+                case 'en/ru':
+                    keyElement.textContent = key.valueENG;
+                    keyElement.addEventListener('click', () => {
+                        this.toggleLanguage();
+                    });
+                    break;
                 default:
                     keyElement.textContent = key.valueENG.toLowerCase();
                     keyElement.addEventListener('click', () => {
@@ -150,6 +158,19 @@ export default class Keyboard {
                 key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
             }
         });
+    }
+
+    toggleLanguage() {
+        this.properties.language = this.properties.language === 'ENG' ? 'RU' : 'ENG';
+        console.log(this.properties.language);
+
+        this.elements.keys.forEach((key, i) => {
+            if (key.textContent.length === 1) {
+                key.textContent = keys[i][`value${this.properties.language}`];
+            }
+        });
+        this.properties.capsLock = !this.properties.capsLock;
+        this.toggleCapsLock();
     }
 
     triggerEvent(handlerName) {
