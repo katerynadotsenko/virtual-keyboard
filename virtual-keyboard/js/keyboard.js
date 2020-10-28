@@ -18,7 +18,8 @@ export default class Keyboard {
             value: '',
             capsLock: false,
             shift: false,
-            language: null
+            language: null,
+            mute: false
         }
     }
 
@@ -95,6 +96,8 @@ export default class Keyboard {
                     keyElement.dataset.key = 'Backspace';
 
                     keyElement.addEventListener('click', () => {
+                        this.setSound('backspace');
+
                         let position = this.keyboardInput.selectionStart;
                         let text = this.keyboardInput.value;
                         this.properties.value = text.slice(0, position-1) + text.slice(position, text.length);
@@ -109,6 +112,8 @@ export default class Keyboard {
                     keyElement.dataset.key = 'CapsLock';
 
                     keyElement.addEventListener('click', () => {
+                        this.setSound('caps');
+
                         this.toggleCapsLock();
                         keyElement.classList.toggle('keyboard__key_active', this.properties.capsLock);
                         this.keyboardInput.focus();
@@ -121,6 +126,8 @@ export default class Keyboard {
                     keyElement.dataset.key = 'Enter';
 
                     keyElement.addEventListener('click', () => {
+                        this.setSound('enter');
+
                         let keypress = '\n';
                         this.input(keypress);
                     });
@@ -131,6 +138,8 @@ export default class Keyboard {
                     keyElement.textContent = key.valueENG;
                     keyElement.dataset.key = 'ShiftLeft';
                     keyElement.addEventListener('click', () => {
+                        this.setSound('shift');
+
                         this.toggleShift();
                         keyElement.classList.toggle('keyboard__key_active', this.properties.shift);
                         this.keyboardInput.focus();
@@ -142,6 +151,8 @@ export default class Keyboard {
                     keyElement.dataset.key = 'Space';
 
                     keyElement.addEventListener('click', () => {
+                        this.setSound('space');
+
                         let keypress = ' ';
                         this.input(keypress);
                     });
@@ -151,6 +162,8 @@ export default class Keyboard {
                     keyElement.classList.add('keyboard__key_wide');
                     keyElement.textContent = key.valueENG;
                     keyElement.addEventListener('click', () => {
+                        this.setSound('main');
+
                         this.close();
                         this.triggerEvent('onclose');
                     });
@@ -159,33 +172,53 @@ export default class Keyboard {
                 case 'en/ru':
                     keyElement.classList.add('keyboard__key_wide', 'keyboard__key_double');
                     keyElement.innerHTML = `<span class='keyboard__key_active-text'>en</span><span>ru</span>`
-                    //keyElement.textContent = key.valueENG;
+
                     keyElement.addEventListener('click', () => {
+                        this.setSound('main');
+
                         this.toggleLanguage();
                         this.keyboardInput.focus();
                     });
                     break;
+
                 case '→':
                     keyElement.textContent = key.valueENG;
                     keyElement.dataset.key = 'ArrowRight';
 
                     keyElement.addEventListener('click', () => {
+                        this.setSound('main');
+
                         let position = this.keyboardInput.selectionStart;
                         this.keyboardInput.focus();
                         this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position + 1;
 
                     });
                     break;
+
                 case '←':
                     keyElement.textContent = key.valueENG;
                     keyElement.dataset.key = 'ArrowLeft';
 
                     keyElement.addEventListener('click', () => {
+                        this.setSound('main');
+
                         let position = this.keyboardInput.selectionStart;
                         this.keyboardInput.focus();
                         this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position - 1;
                     });
                     break;
+                
+                case 'mute':
+                    keyElement.innerHTML = `<span class="material-icons">volume_up</span>`;
+
+                    keyElement.addEventListener('click', () => {
+                        this.setSound('main');
+
+                        this.toggleSound(keyElement);
+                        this.keyboardInput.focus();
+                    });
+                    break;
+
                 default:
                     keyElement.textContent = key.valueENG.toLowerCase();
                     if (key.keycode) {
@@ -194,6 +227,8 @@ export default class Keyboard {
                         keyElement.dataset.key = `Key${key.valueENG.toUpperCase()}`;
                     }
                     keyElement.addEventListener('click', () => {
+                        this.setSound('main');
+
                         let keypress = '';
 
                         if(this.properties.shift && keys[i][`shiftValue${this.properties.language}`]) {
@@ -218,12 +253,28 @@ export default class Keyboard {
         return fragment;
     }
 
+    setSound(key) {
+        if (this.properties.mute) {
+            return;
+        }
+        const audio = document.querySelector(`audio[data-key="${this.properties.language.toLowerCase()}-${key}"]`);
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play();
+        }
+    }
+
     input(key) {
         let position = this.keyboardInput.selectionStart;
         let text = this.keyboardInput.value;
         this.properties.value = text.slice(0, position) + key + text.slice(position);
         this.triggerEvent('oninput');
         this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position + 1;
+    }
+
+    toggleSound(keyElement) {
+        this.properties.mute = !this.properties.mute;
+        keyElement.innerHTML = this.properties.mute ? `<span class="material-icons">volume_off</span>` : `<span class="material-icons">volume_up</span>`;
     }
 
     toggleCapsLock() {

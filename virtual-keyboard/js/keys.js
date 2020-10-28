@@ -265,7 +265,7 @@ const keys = [
         valueENG: 'space',
     },
     {
-        valueENG: '--',
+        valueENG: 'mute',
     },
     {
         valueENG: '←',
