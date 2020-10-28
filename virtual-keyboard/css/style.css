@@ -56,6 +56,10 @@ body {
     background: rgba(255, 255, 255, .05);
 }
 
+.keyboard__key_press {
+    background: rgba(255, 255, 255, .05);
+}
+
 .keyboard__key_wide {
     width: 18%;
     max-width: 120px;

@@ -39,10 +39,28 @@ export default class Keyboard {
 
         this.keyboardInput = document.querySelector('.keyboard-input');
 
-        this.keyboardInput.addEventListener('keyup', () => {
-            console.log('this.keyboardInput.value - ', this.keyboardInput.value);
-            //String.fromCharCode(e.keyCode)
-            this.properties.value = this.keyboardInput.value;
+        this.keyboardInput.addEventListener('keyup', (e) => {
+            console.log("key - ", e.code);
+            switch (e.code) {
+                case 'CapsLock':
+                    this.toggleCapsLock();
+                    let keyElement = document.querySelector(`[data-key=${e.code}]`);
+                    keyElement.classList.toggle('keyboard__key_active', this.properties.capsLock);
+                    break;
+
+                default:
+                    this.elements.keys.forEach(key => {
+                        if (key.dataset.key === e.code) {
+                            key.classList.add('keyboard__key_press');
+                            setTimeout(() => {
+                                key.classList.remove('keyboard__key_press');
+                            }, 200);
+                        }
+                    })
+                    this.properties.value = this.keyboardInput.value;
+                    break;
+            }
+            
         });
 
         this.keyboardInput.addEventListener('focus', () => {
@@ -67,6 +85,7 @@ export default class Keyboard {
                 case 'Backspace':
                     keyElement.classList.add('keyboard__key_wide');
                     keyElement.textContent = key.valueENG;
+                    keyElement.dataset.key = 'Backspace';
 
                     keyElement.addEventListener('click', () => {
                         let position = this.keyboardInput.selectionStart;
@@ -80,6 +99,7 @@ export default class Keyboard {
                 case 'Caps':
                     keyElement.classList.add('keyboard__key_wide', 'keyboard__key_activatable');
                     keyElement.textContent = key.valueENG;
+                    keyElement.dataset.key = 'CapsLock';
 
                     keyElement.addEventListener('click', () => {
                         this.toggleCapsLock();
@@ -90,19 +110,28 @@ export default class Keyboard {
                 case 'Enter':
                     keyElement.classList.add('keyboard__key_wide');
                     keyElement.textContent = key.valueENG;
+                    keyElement.dataset.key = 'Enter';
+
                     keyElement.addEventListener('click', () => {
                         let keypress = '\n';
                         this.input(keypress);
                     });
                     break;
-                //TODO
+
                 case 'Shift':
                     keyElement.classList.add('keyboard__key_wide', 'keyboard__key_activatable');
                     keyElement.textContent = key.valueENG;
+                    keyElement.dataset.key = 'ShiftLeft';
+                    keyElement.addEventListener('click', () => {
+                        this.toggleShift();
+                        keyElement.classList.toggle('keyboard__key_active', this.properties.shift);
+                      });
                     break;
 
                 case 'space':
                     keyElement.classList.add('keyboard__key_extra-wide');
+                    keyElement.dataset.key = 'Space';
+
                     keyElement.addEventListener('click', () => {
                         let keypress = ' ';
                         this.input(keypress);
@@ -125,6 +154,8 @@ export default class Keyboard {
                     break;
                 case '→':
                     keyElement.textContent = key.valueENG;
+                    keyElement.dataset.key = 'ArrowRight';
+
                     keyElement.addEventListener('click', () => {
                         let position = this.keyboardInput.selectionStart;
                         this.keyboardInput.focus();
@@ -134,6 +165,8 @@ export default class Keyboard {
                     break;
                 case '←':
                     keyElement.textContent = key.valueENG;
+                    keyElement.dataset.key = 'ArrowLeft';
+
                     keyElement.addEventListener('click', () => {
                         let position = this.keyboardInput.selectionStart;
                         this.keyboardInput.focus();
@@ -142,6 +175,11 @@ export default class Keyboard {
                     break;
                 default:
                     keyElement.textContent = key.valueENG.toLowerCase();
+                    if (key.keycode) {
+                        keyElement.dataset.key = key.keycode;
+                    } else {
+                        keyElement.dataset.key = `Key${key.valueENG.toUpperCase()}`;
+                    }
                     keyElement.addEventListener('click', () => {
                         let keypress = this.properties.capsLock ? key[`value${this.properties.language}`].toUpperCase() : key[`value${this.properties.language}`].toLowerCase();
                         this.input(keypress);
@@ -172,7 +210,25 @@ export default class Keyboard {
         
         this.elements.keys.forEach(key => {
             if (key.textContent.length === 1) {
-                key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+                key.textContent = (this.properties.capsLock && !this.properties.shift) || (!this.properties.capsLock && this.properties.shift) 
+                                        ? key.textContent.toUpperCase() 
+                                        : key.textContent.toLowerCase();
+            }
+        });
+    }
+
+    toggleShift() {
+        this.properties.shift = !this.properties.shift;
+        
+        this.elements.keys.forEach((key, i) => {
+            if (key.textContent.length === 1) {
+                if(keys[i][`shiftValue${this.properties.language}`]) {
+                    key.textContent = this.properties.shift ? keys[i][`shiftValue${this.properties.language}`] : keys[i][`value${this.properties.language}`];
+                } else {
+                    key.textContent = (this.properties.shift && !this.properties.capsLock) || (!this.properties.shift && this.properties.capsLock) 
+                                        ? key.textContent.toUpperCase() 
+                                        : key.textContent.toLowerCase();
+                }
             }
         });
     }
@@ -183,7 +239,9 @@ export default class Keyboard {
 
         this.elements.keys.forEach((key, i) => {
             if (key.textContent.length === 1) {
-                key.textContent = keys[i][`value${this.properties.language}`];
+                key.textContent = this.properties.shift && keys[i][`shiftValue${this.properties.language}`] 
+                                    ? keys[i][`shiftValue${this.properties.language}`] 
+                                    : keys[i][`value${this.properties.language}`];
             }
         });
         this.properties.capsLock = !this.properties.capsLock;
