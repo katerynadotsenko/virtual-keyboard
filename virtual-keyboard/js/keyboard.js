@@ -181,9 +181,15 @@ export default class Keyboard {
                         keyElement.dataset.key = `Key${key.valueENG.toUpperCase()}`;
                     }
                     keyElement.addEventListener('click', () => {
-                        let keypress = (this.properties.shift && !this.properties.capsLock) || (!this.properties.shift && this.properties.capsLock) 
+                        let keypress = '';
+
+                        if(this.properties.shift && keys[i][`shiftValue${this.properties.language}`]) {
+                            keypress = keys[i][`shiftValue${this.properties.language}`];
+                        } else {
+                            keypress = (this.properties.shift && !this.properties.capsLock) || (!this.properties.shift && this.properties.capsLock) 
                                         ? key[`value${this.properties.language}`].toUpperCase() 
                                         : key[`value${this.properties.language}`].toLowerCase();
+                        }
                         this.input(keypress);
                     });
                     break;
