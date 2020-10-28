@@ -41,11 +41,18 @@ export default class Keyboard {
 
         this.keyboardInput.addEventListener('keyup', (e) => {
             console.log("key - ", e.code);
+            let keyElement = '';
             switch (e.code) {
                 case 'CapsLock':
                     this.toggleCapsLock();
-                    let keyElement = document.querySelector(`[data-key=${e.code}]`);
+                    keyElement = document.querySelector(`[data-key=${e.code}]`);
                     keyElement.classList.toggle('keyboard__key_active', this.properties.capsLock);
+                    break;
+
+                case 'ShiftLeft':
+                    this.toggleShift();
+                    keyElement = document.querySelector(`[data-key=${e.code}]`);
+                    keyElement.classList.toggle('keyboard__key_active', this.properties.shift);
                     break;
 
                 default:
@@ -104,6 +111,7 @@ export default class Keyboard {
                     keyElement.addEventListener('click', () => {
                         this.toggleCapsLock();
                         keyElement.classList.toggle('keyboard__key_active', this.properties.capsLock);
+                        this.keyboardInput.focus();
                       });
                     break;
 
@@ -125,6 +133,7 @@ export default class Keyboard {
                     keyElement.addEventListener('click', () => {
                         this.toggleShift();
                         keyElement.classList.toggle('keyboard__key_active', this.properties.shift);
+                        this.keyboardInput.focus();
                       });
                     break;
 
@@ -139,6 +148,7 @@ export default class Keyboard {
                     break;
 
                 case 'done':
+                    keyElement.classList.add('keyboard__key_wide');
                     keyElement.textContent = key.valueENG;
                     keyElement.addEventListener('click', () => {
                         this.close();
@@ -147,9 +157,12 @@ export default class Keyboard {
                     break;
 
                 case 'en/ru':
-                    keyElement.textContent = key.valueENG;
+                    keyElement.classList.add('keyboard__key_wide', 'keyboard__key_double');
+                    keyElement.innerHTML = `<span class='keyboard__key_active-text'>en</span><span>ru</span>`
+                    //keyElement.textContent = key.valueENG;
                     keyElement.addEventListener('click', () => {
                         this.toggleLanguage();
+                        this.keyboardInput.focus();
                     });
                     break;
                 case '→':
@@ -242,6 +255,12 @@ export default class Keyboard {
     }
 
     toggleLanguage() {
+        const keyboardKeyDouble = document.querySelectorAll('.keyboard__key_double span');
+
+        keyboardKeyDouble.forEach(item => {
+            item.classList.toggle('keyboard__key_active-text');
+        });
+
         this.properties.language = this.properties.language === 'ENG' ? 'RU' : 'ENG';
         console.log(this.properties.language);
 

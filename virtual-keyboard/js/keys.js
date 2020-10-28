@@ -262,10 +262,10 @@ const keys = [
         valueENG: 'en/ru',
     },
     {
-        valueENG: '--',
+        valueENG: 'space',
     },
     {
-        valueENG: 'space',
+        valueENG: '--',
     },
     {
         valueENG: '←',

@@ -89,3 +89,16 @@ body {
 .keyboard__key_dark {
     background: rgba(0, 0, 0, 0.25);
 }
+
+.keyboard__key_double {
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.keyboard__key_double span {
+    margin: 10px;
+}
+
+.keyboard__key_active-text {
+    color: #fff;
+}
