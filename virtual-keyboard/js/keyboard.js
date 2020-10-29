@@ -102,10 +102,15 @@ export default class Keyboard {
             
         });
 
+        this.keyboardInput.onblur = () => {
+            if (!this.eventHandlers.onclose) {
+                this.keyboardInput.focus();
+            }
+       };
+
         this.keyboardInput.addEventListener('focus', () => {
             this.open(this.keyboardInput.value, currentValue => {
                 this.keyboardInput.value = currentValue;
-                this.keyboardInput.focus();
             });
         });
     }
@@ -146,7 +151,6 @@ export default class Keyboard {
 
                         this.toggleCapsLock();
                         keyElement.classList.toggle('keyboard__key_active', this.properties.capsLock);
-                        this.keyboardInput.focus();
                       });
                     break;
 
@@ -172,7 +176,6 @@ export default class Keyboard {
 
                         this.toggleShift();
                         keyElement.classList.toggle('keyboard__key_active', this.properties.shift);
-                        this.keyboardInput.focus();
                       });
                     break;
 
@@ -207,7 +210,6 @@ export default class Keyboard {
                         this.setSound('main');
 
                         this.toggleLanguage();
-                        this.keyboardInput.focus();
                     });
                     break;
 
@@ -219,7 +221,6 @@ export default class Keyboard {
                         this.setSound('main');
 
                         let position = this.keyboardInput.selectionStart;
-                        this.keyboardInput.focus();
                         this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position + 1;
 
                     });
@@ -233,7 +234,6 @@ export default class Keyboard {
                         this.setSound('main');
 
                         let position = this.keyboardInput.selectionStart;
-                        this.keyboardInput.focus();
                         this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position - 1;
                     });
                     break;
@@ -245,7 +245,6 @@ export default class Keyboard {
                         this.setSound('main');
 
                         this.toggleSound(keyElement);
-                        this.keyboardInput.focus();
                     });
                     break;
 
@@ -255,7 +254,6 @@ export default class Keyboard {
 
                 keyElement.addEventListener('click', () => {
                     this.recognition(keyElement);
-                    this.keyboardInput.focus();
                 });
                 break;
 
@@ -424,8 +422,9 @@ export default class Keyboard {
     close() {
         this.properties.value = '';
         this.eventHandlers.oninput = oninput;
-        this.eventHandlers.onclose = onclose;
+        this.eventHandlers.onclose = 'true';
         this.elements.main.classList.add('keyboard_hidden');
+        this.keyboardInput.blur();
       }
 
 }
