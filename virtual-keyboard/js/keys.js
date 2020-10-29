@@ -265,15 +265,18 @@ const keys = [
         valueENG: 'space',
     },
     {
-        valueENG: 'mute',
-    },
-    {
         valueENG: '←',
         valueRU: '←'
     },
     {
         valueENG: '→',
         valueRU: '→'
+    },
+    {
+        valueENG: 'mute',
+    },
+    {
+        valueENG: 'recognition',
     }
 ]
 

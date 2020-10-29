@@ -1,5 +1,10 @@
 import keys from './keys.js';
 
+window.SpeechRecognition =  window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.interimResults = true;
+recognition.continuous = true;
+
 export default class Keyboard {
     constructor() {
         this.elements = {
@@ -19,7 +24,8 @@ export default class Keyboard {
             capsLock: false,
             shift: false,
             language: null,
-            mute: false
+            mute: false,
+            recognition: false
         }
     }
 
@@ -243,6 +249,16 @@ export default class Keyboard {
                     });
                     break;
 
+                case 'recognition':
+                keyElement.innerHTML = `<span class="material-icons">voice_over_off</span>`;
+                keyElement.dataset.key = 'recognition';
+
+                keyElement.addEventListener('click', () => {
+                    this.recognition(keyElement);
+                    this.keyboardInput.focus();
+                });
+                break;
+
                 default:
                     keyElement.textContent = key.valueENG.toLowerCase();
                     if (key.keycode) {
@@ -285,6 +301,40 @@ export default class Keyboard {
         if (audio) {
             audio.currentTime = 0;
             audio.play();
+        }
+    }
+
+    recognition(keyElement) {
+        keyElement = keyElement ? keyElement : document.querySelector('[data-key="recognition"]');
+
+        this.properties.recognition = !this.properties.recognition;
+        recognition.lang = this.properties.language === 'ENG' ? 'en-US' : 'ru-RU';
+        const previousValue = this.properties.value;
+
+        if (this.properties.recognition) {
+            const rec = document.createElement('span');
+            rec.classList.add('rec');
+            keyElement.innerHTML = `<span class="material-icons">record_voice_over</span>`;
+            keyElement.append(rec);
+            rec.animate([
+                { background: '#fff' }
+              ], {
+                duration: 400,
+                iterations: Infinity,
+                direction: 'alternate-reverse'
+              })
+            recognition.start();
+            let transcript = '';
+
+            recognition.addEventListener('result', (e) => {
+                transcript = Array.from(e.results).map(result => result[0]).map(result => result.transcript).join('') + ' ';
+                this.properties.value = previousValue + ' ' + transcript;
+                this.triggerEvent('oninput');
+            });
+           
+        } else {
+            keyElement.innerHTML = `<span class="material-icons">voice_over_off</span>`;
+            recognition.stop();
         }
     }
 
@@ -337,6 +387,15 @@ export default class Keyboard {
         });
 
         this.properties.language = this.properties.language === 'ENG' ? 'RU' : 'ENG';
+
+        if (this.properties.recognition) {
+            recognition.abort();
+            setTimeout(() => {
+                this.properties.recognition = !this.properties.recognition;
+                this.recognition();
+            }, 100);
+            
+        }
 
         this.elements.keys.forEach((key, i) => {
             if (key.textContent.length === 1) {
