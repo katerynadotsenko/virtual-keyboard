@@ -41,19 +41,44 @@ export default class Keyboard {
         this.keyboardInput = document.querySelector('.keyboard-input');
 
         this.keyboardInput.addEventListener('keyup', (e) => {
-            console.log("key - ", e.code);
             let keyElement = '';
             switch (e.code) {
                 case 'CapsLock':
-                    this.toggleCapsLock();
                     keyElement = document.querySelector(`[data-key=${e.code}]`);
-                    keyElement.classList.toggle('keyboard__key_active', this.properties.capsLock);
+                    keyElement.classList.toggle('keyboard__key_press');
                     break;
 
                 case 'ShiftLeft':
                     this.toggleShift();
                     keyElement = document.querySelector(`[data-key=${e.code}]`);
                     keyElement.classList.toggle('keyboard__key_active', this.properties.shift);
+                    keyElement.classList.toggle('keyboard__key_press');
+                    break;
+
+                default:
+                    break;
+            }
+        });
+
+        this.keyboardInput.addEventListener('keydown', (e) => {
+            let keyElement = '';
+            switch (e.code) {
+                case 'CapsLock':
+                    if (!e.repeat) {
+                        this.toggleCapsLock();
+                        keyElement = document.querySelector(`[data-key=${e.code}]`);
+                        keyElement.classList.toggle('keyboard__key_active', this.properties.capsLock);
+                        keyElement.classList.toggle('keyboard__key_press');
+                    }
+                    break;
+
+                case 'ShiftLeft':
+                    if (!e.repeat) {
+                        this.toggleShift();
+                        keyElement = document.querySelector(`[data-key=${e.code}]`);
+                        keyElement.classList.toggle('keyboard__key_active', this.properties.shift);
+                        keyElement.classList.toggle('keyboard__key_press');
+                    }
                     break;
 
                 default:
@@ -62,9 +87,9 @@ export default class Keyboard {
                             key.classList.add('keyboard__key_press');
                             setTimeout(() => {
                                 key.classList.remove('keyboard__key_press');
-                            }, 200);
+                            }, 150);
                         }
-                    })
+                    });
                     this.properties.value = this.keyboardInput.value;
                     break;
             }
@@ -74,7 +99,6 @@ export default class Keyboard {
         this.keyboardInput.addEventListener('focus', () => {
             this.open(this.keyboardInput.value, currentValue => {
                 this.keyboardInput.value = currentValue;
-                console.log("currentValue - ", currentValue);
                 this.keyboardInput.focus();
             });
         });
@@ -313,7 +337,6 @@ export default class Keyboard {
         });
 
         this.properties.language = this.properties.language === 'ENG' ? 'RU' : 'ENG';
-        console.log(this.properties.language);
 
         this.elements.keys.forEach((key, i) => {
             if (key.textContent.length === 1) {
