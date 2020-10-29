@@ -127,7 +127,7 @@ export default class Keyboard {
             switch (key.valueENG) {
                 case 'Backspace':
                     keyElement.classList.add('keyboard__key_wide');
-                    keyElement.textContent = key.valueENG;
+                    keyElement.innerHTML = `<span class="material-icons">backspace</span>`;
                     keyElement.dataset.key = 'Backspace';
 
                     keyElement.addEventListener('click', () => {
@@ -192,8 +192,8 @@ export default class Keyboard {
                     break;
 
                 case 'done':
-                    keyElement.classList.add('keyboard__key_wide');
-                    keyElement.textContent = key.valueENG;
+                    keyElement.classList.add('keyboard__key_wider');
+                    keyElement.innerHTML = `<span class="material-icons">keyboard_hide</span>`;
                     keyElement.addEventListener('click', () => {
                         this.setSound('main');
 
@@ -239,6 +239,7 @@ export default class Keyboard {
                     break;
                 
                 case 'mute':
+                    keyElement.classList.add('keyboard__key_wider');
                     keyElement.innerHTML = `<span class="material-icons">volume_up</span>`;
 
                     keyElement.addEventListener('click', () => {
@@ -250,6 +251,7 @@ export default class Keyboard {
 
                 case 'recognition':
                 keyElement.innerHTML = `<span class="material-icons">voice_over_off</span>`;
+                keyElement.classList.add('keyboard__key_wider');
                 keyElement.dataset.key = 'recognition';
 
                 keyElement.addEventListener('click', () => {
