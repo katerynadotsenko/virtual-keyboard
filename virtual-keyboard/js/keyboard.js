@@ -133,11 +133,13 @@ export default class Keyboard {
                     keyElement.addEventListener('click', () => {
                         this.setSound('backspace');
 
-                        let position = this.keyboardInput.selectionStart;
-                        let text = this.keyboardInput.value;
-                        this.properties.value = text.slice(0, position-1) + text.slice(position, text.length);
+                        const positionStart = this.keyboardInput.selectionStart;
+                        const positionEnd = this.keyboardInput.selectionEnd;
+                        const text = this.keyboardInput.value;
+                        
+                        this.properties.value = text.slice(0, positionStart===positionEnd ? positionStart-1 : positionStart) + text.slice(positionEnd, text.length);
                         this.triggerEvent('oninput');
-                        this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position-1;
+                        this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = positionStart===positionEnd ? positionStart-1 : positionStart;
                       });
                     break;
 
@@ -339,11 +341,12 @@ export default class Keyboard {
     }
 
     input(key) {
-        let position = this.keyboardInput.selectionStart;
-        let text = this.keyboardInput.value;
-        this.properties.value = text.slice(0, position) + key + text.slice(position);
+        const positionStart = this.keyboardInput.selectionStart;
+        const positionEnd = this.keyboardInput.selectionEnd;
+        const text = this.keyboardInput.value;
+        this.properties.value = text.slice(0, positionStart) + key + text.slice(positionEnd);
         this.triggerEvent('oninput');
-        this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position + 1;
+        this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = positionStart + 1;
     }
 
     toggleSound(keyElement) {

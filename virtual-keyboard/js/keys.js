@@ -256,6 +256,9 @@ const keys = [
         keycode: 'Slash'
     },
     {
+        valueENG: 'mute',
+    },
+    {
         valueENG: 'done',
     },
     {
@@ -271,9 +274,6 @@ const keys = [
     {
         valueENG: '→',
         valueRU: '→'
-    },
-    {
-        valueENG: 'mute',
     },
     {
         valueENG: 'recognition',

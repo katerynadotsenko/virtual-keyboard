@@ -95,6 +95,7 @@ body {
     height: 8px;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 50%;
+    display: block;
 }
 
 .keyboard__key_active::after {
@@ -126,5 +127,9 @@ body {
     .keyboard__key_wide {
         width: 15%;
         max-width: 90px;
+    }
+
+    .rec {
+        display: none;
     }
 }
