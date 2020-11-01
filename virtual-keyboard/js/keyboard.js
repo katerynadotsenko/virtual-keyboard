@@ -236,7 +236,7 @@ export default class Keyboard {
                         this.setSound('main');
 
                         let position = this.keyboardInput.selectionStart;
-                        this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position - 1;
+                        this.keyboardInput.selectionStart = this.keyboardInput.selectionEnd = position > 0 ? position - 1 : 0;
                     });
                     break;
                 
