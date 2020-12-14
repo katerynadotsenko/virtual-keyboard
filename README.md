@@ -1,2 +1,1 @@
-# katerynadotsenko-JS2020Q3
-Private repository for @katerynadotsenko
+To see the project click here https://katerynadotsenko.github.io/virtual-keyboard/virtual-keyboard/
